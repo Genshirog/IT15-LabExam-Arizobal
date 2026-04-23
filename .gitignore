@@ -1,0 +1,22 @@
+# Build output
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+.vs/
+
+# ASP.NET Core
+appsettings.Development.json
+
+# Migrations (optional - remove if you want to track migrations)
+# Migrations/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/

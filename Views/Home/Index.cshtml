@@ -1,0 +1,358 @@
+@model LabExam1.ViewModel.HomeViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+    :root {
+        --bg: #0f1117;
+        --surface: #1a1d27;
+        --surface2: #22263a;
+        --accent: #6c63ff;
+        --accent2: #ff6584;
+        --accent3: #43e97b;
+        --text: #e8eaf6;
+        --muted: #7b7f9e;
+        --border: rgba(255,255,255,0.07);
+    }
+
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'DM Sans', sans-serif;
+        margin: 0;
+    }
+
+    .dashboard {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2.5rem 1.5rem;
+    }
+
+    /* Header */
+    .dash-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 2.5rem;
+    }
+
+    .dash-title {
+        font-family: 'Syne', sans-serif;
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin: 0;
+        background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .dash-subtitle {
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin: 0.3rem 0 0;
+    }
+
+    .dash-actions {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .btn-dash {
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-primary-dash {
+        background: var(--accent);
+        color: #fff;
+    }
+
+    .btn-primary-dash:hover {
+        background: #5a52e0;
+        color: #fff;
+        transform: translateY(-1px);
+    }
+
+    .btn-secondary-dash {
+        background: var(--surface2);
+        color: var(--text);
+        border: 1px solid var(--border);
+    }
+
+    .btn-secondary-dash:hover {
+        background: var(--surface);
+        color: var(--text);
+        transform: translateY(-1px);
+    }
+
+    /* Stat Cards */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.4rem;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.2s;
+    }
+
+    .stat-card:hover { transform: translateY(-2px); }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+    }
+
+    .stat-card:nth-child(1)::before { background: var(--accent); }
+    .stat-card:nth-child(2)::before { background: var(--accent3); }
+    .stat-card:nth-child(3)::before { background: var(--accent2); }
+    .stat-card:nth-child(4)::before { background: #f7b731; }
+
+    .stat-label {
+        font-size: 0.75rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+        font-family: 'Syne', sans-serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .stat-icon {
+        position: absolute;
+        top: 1.2rem;
+        right: 1.2rem;
+        font-size: 1.4rem;
+        opacity: 0.3;
+    }
+
+    /* Tables */
+    .tables-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    .table-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .table-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem 1.5rem;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .table-card-title {
+        font-family: 'Syne', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .badge {
+        background: var(--surface2);
+        color: var(--muted);
+        border-radius: 20px;
+        padding: 0.2rem 0.7rem;
+        font-size: 0.75rem;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead th {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        text-align: left;
+        background: var(--surface2);
+    }
+
+    tbody tr {
+        border-top: 1px solid var(--border);
+        transition: background 0.15s;
+    }
+
+    tbody tr:hover { background: var(--surface2); }
+
+    tbody td {
+        padding: 0.85rem 1.5rem;
+        font-size: 0.875rem;
+    }
+
+    .pill {
+        display: inline-block;
+        padding: 0.2rem 0.65rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .pill-green { background: rgba(67,233,123,0.12); color: var(--accent3); }
+    .pill-purple { background: rgba(108,99,255,0.12); color: var(--accent); }
+
+    .empty-state {
+        padding: 2.5rem;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.875rem;
+    }
+
+    @@media (max-width: 900px) {
+        .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        .tables-grid { grid-template-columns: 1fr; }
+        .dash-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    }
+</style>
+
+<div class="dashboard">
+
+    <!-- Header -->
+    <div class="dash-header">
+        <div>
+            <h1 class="dash-title">Payroll Dashboard</h1>
+            <p class="dash-subtitle">@DateTime.Now.ToString("dddd, MMMM dd yyyy")</p>
+        </div>
+        <div class="dash-actions">
+            <a href="/Employee/Create" class="btn-dash btn-secondary-dash">+ Add Employee</a>
+            <a href="/Payroll/Create" class="btn-dash btn-primary-dash">+ New Payroll</a>
+        </div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Employees</div>
+            <div class="stat-value">@Model.TotalEmployees</div>
+            <div class="stat-icon">👥</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Total Gross Pay</div>
+            <div class="stat-value">₱@Model.TotalGrossPay.ToString("N0")</div>
+            <div class="stat-icon">💰</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Total Deductions</div>
+            <div class="stat-value">₱@Model.TotalDeductions.ToString("N0")</div>
+            <div class="stat-icon">📉</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Total Net Pay</div>
+            <div class="stat-value">₱@Model.TotalNetPay.ToString("N0")</div>
+            <div class="stat-icon">✅</div>
+        </div>
+    </div>
+
+    <!-- Tables -->
+    <div class="tables-grid">
+
+        <!-- Employees -->
+        <div class="table-card">
+            <div class="table-card-header">
+                <h2 class="table-card-title">Employees</h2>
+                <div style="display:flex;gap:0.5rem;align-items:center;">
+                    <span class="badge">@Model.TotalEmployees total</span>
+                    <a href="/Employee" class="btn-dash btn-secondary-dash" style="padding:0.3rem 0.8rem;font-size:0.75rem;">View All</a>
+                </div>
+            </div>
+            @if (Model.Employees.Any())
+            {
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Daily Rate</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var emp in Model.Employees.Take(6))
+                        {
+                            <tr>
+                                <td>@emp.FirstName @emp.LastName</td>
+                                <td><span class="pill pill-green">₱@emp.DailyRate.ToString("N0")</span></td>
+                                <td><a href="/Employee/Details/@emp.Id" style="color:var(--muted);font-size:0.8rem;text-decoration:none;">View →</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="empty-state">No employees yet. <a href="/Employee/Create" style="color:var(--accent);">Add one →</a></div>
+            }
+        </div>
+
+        <!-- Payrolls -->
+        <div class="table-card">
+            <div class="table-card-header">
+                <h2 class="table-card-title">Recent Payrolls</h2>
+                <div style="display:flex;gap:0.5rem;align-items:center;">
+                    <span class="badge">@Model.Payrolls.Count total</span>
+                    <a href="/Payroll" class="btn-dash btn-secondary-dash" style="padding:0.3rem 0.8rem;font-size:0.75rem;">View All</a>
+                </div>
+            </div>
+            @if (Model.Payrolls.Any())
+            {
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Net Pay</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in Model.Payrolls.OrderByDescending(x => x.Date).Take(6))
+                        {
+                            <tr>
+                                <td>@p.Employee?.FirstName @p.Employee?.LastName</td>
+                                <td><span class="pill pill-purple">₱@p.NetPay.ToString("N0")</span></td>
+                                <td style="color:var(--muted);font-size:0.8rem;">@p.Date.ToString("MMM dd")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="empty-state">No payroll records yet. <a href="/Payroll/Create" style="color:var(--accent);">Create one →</a></div>
+            }
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,81 @@
+@model LabExam1.Models.Payroll
+@{ ViewData["Title"] = "Payroll Details"; }
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap');
+    :root {
+        --bg: #0f1117; --surface: #1a1d27; --surface2: #22263a;
+        --accent: #6c63ff; --accent3: #43e97b; --accent2: #ff6584;
+        --text: #e8eaf6; --muted: #7b7f9e; --border: rgba(255,255,255,0.07);
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; }
+    .page { max-width: 520px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .page-title { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; margin: 0 0 0.3rem;
+        background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .page-sub { color: var(--muted); font-size: 0.875rem; margin-bottom: 2rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .detail-row { display: flex; justify-content: space-between; align-items: center;
+        padding: 0.9rem 1.5rem; border-bottom: 1px solid var(--border); }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
+    .detail-value { font-size: 0.9rem; font-weight: 500; }
+    .pill { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+    .pill-green { background: rgba(67,233,123,0.12); color: var(--accent3); }
+    .pill-purple { background: rgba(108,99,255,0.12); color: var(--accent); }
+    .pill-red { background: rgba(255,101,132,0.12); color: var(--accent2); }
+    .divider { height: 1px; background: var(--border); margin: 0; }
+    .section-label { padding: 0.6rem 1.5rem; font-size: 0.7rem; text-transform: uppercase;
+        letter-spacing: 0.08em; color: var(--muted); background: var(--surface2); }
+    .actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+    .btn { padding: 0.6rem 1.2rem; border-radius: 8px; font-size: 0.85rem; font-weight: 500;
+        text-decoration: none; border: none; cursor: pointer; transition: all 0.2s; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #5a52e0; color: #fff; }
+    .btn-outline { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+    .btn-outline:hover { color: var(--text); }
+    .back-link { display: inline-block; margin-top: 1rem; color: var(--muted); font-size: 0.85rem; text-decoration: none; }
+    .back-link:hover { color: var(--text); }
+</style>
+
+<div class="page">
+    <h1 class="page-title">Payroll Details</h1>
+    <p class="page-sub">Record #@Model.Id</p>
+
+    <div class="card">
+        <div class="section-label">Employee</div>
+        <div class="detail-row">
+            <span class="detail-label">Name</span>
+            <span class="detail-value">@Model.Employee?.FirstName @Model.Employee?.LastName</span>
+        </div>
+
+        <div class="section-label">Period</div>
+        <div class="detail-row">
+            <span class="detail-label">Date</span>
+            <span class="detail-value">@Model.Date.ToString("MMMM dd, yyyy")</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Days Worked</span>
+            <span class="detail-value">@Model.DaysWorked days</span>
+        </div>
+
+        <div class="section-label">Computation</div>
+        <div class="detail-row">
+            <span class="detail-label">Gross Pay</span>
+            <span class="detail-value"><span class="pill pill-purple">₱@Model.GrossPay.ToString("N2")</span></span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Deduction</span>
+            <span class="detail-value"><span class="pill pill-red">₱@Model.Deduction.ToString("N2")</span></span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Net Pay</span>
+            <span class="detail-value"><span class="pill pill-green">₱@Model.NetPay.ToString("N2")</span></span>
+        </div>
+    </div>
+
+    <div class="actions">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        <a asp-action="Index" class="btn btn-outline">Back to List</a>
+    </div>
+</div>
